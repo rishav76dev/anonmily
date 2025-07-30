@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -15,12 +14,12 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  username  String    @unique
-  email     String    @unique
-  messages  Message[]
-  slug      String    @unique
-
+  id       Int       @id @default(autoincrement())
+  username String    @unique
+  email    String    @unique
+  password String
+  messages Message[]
+  slug     String    @unique
 }
 
 model Message {
@@ -31,8 +30,14 @@ model Message {
   user       User?     @relation(fields: [userId], references: [id])
   userId     Int?
   createdAt  DateTime  @default(now())
-  isDisplay  Boolean    @default(false)
+  isDisplay  Boolean   @default(false)
   answeredAt DateTime?
-
 }
 
+//need visitor to post question
+//need user to answer the question
+//need to create slug /link for user
+//need to create sign in and sign up route
+//need to get all question for user
+//need to hide or display option for user
+//
