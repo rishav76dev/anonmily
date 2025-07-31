@@ -20,6 +20,8 @@ model User {
   password String
   messages Message[]
   slug     String    @unique
+  image    String?   
+  bio      String?
 }
 
 model Message {
