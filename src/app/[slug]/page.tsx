@@ -3,9 +3,12 @@ import { notFound } from "next/navigation";
 import { Textarea } from "@/components/ui/textarea";
 import { UserInfo } from "@/components/UserInfo";
 import { QuestionCard } from "@/components/QuestionCard";
+import { useState } from "react";
+import QuestionForm from "@/components/QuestionForm";
 //this is for visitor to ask question
 
 export default async function Page({ params }: { params: { slug: string } }) {
+  const [question, setQuestion] = useState("")
   const { slug } = await params;
 
   const user = await prisma.user.findUnique({
@@ -20,12 +23,18 @@ export default async function Page({ params }: { params: { slug: string } }) {
     <div className="flex  min-h-screen items-center flex-col">
       <div className="w-full max-w-[600px] px-4">
         {/* user profile */}
-        <UserInfo user={user} />
+        <UserInfo
+          user={{
+            username: user.name ?? "Anonymous",
+            image: user.image,
+            bio: user.bio,
+          }}
+        />
 
         {/* question input */}
 
         <p className="pl-1">Send an anonymous message</p>
-        <Textarea placeholder="Type your message here..." />
+        <QuestionForm slug={slug} />
       </div>
 
       <div className="w-full max-w-[1400px] mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
