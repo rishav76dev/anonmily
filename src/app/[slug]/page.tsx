@@ -3,14 +3,11 @@ import { notFound } from "next/navigation";
 import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
-import { Suspense } from "react";
+
 
 //this is for visitor to ask question
-
-export default async function Page({ params }: { params: { slug: string } }) {
-
-  const { slug } = await params;
-
+export default async function Page(props: { params: { slug: string } }) {
+  const { slug } = await Promise.resolve(props.params);
   const user = await prisma.user.findUnique({
     where: { slug },
   });
@@ -20,7 +17,8 @@ export default async function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="flex  min-h-screen items-center flex-col">
+    <div className="flex flex-col">
+      <div className="flex  justify-center">
       <div className="w-full max-w-[600px] px-4">
         {/* user profile */}
         <UserInfo
@@ -36,11 +34,10 @@ export default async function Page({ params }: { params: { slug: string } }) {
         <p className="pl-1">Send an anonymous message</p>
         <QuestionForm slug={slug} />
       </div>
+      </div>
 
-      <div className="w-full max-w-[1400px] mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
-        <Suspense fallback={<p>Loading questions...</p>}>
-          <QuestionContainer slug={slug} />
-        </Suspense>
+      <div className="w-full max-w-[1440px] mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
+        <QuestionContainer slug={slug} />
       </div>
     </div>
   );

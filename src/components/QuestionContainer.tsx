@@ -8,20 +8,23 @@ export default function QuestionContainer({ slug }: { slug: string }) {
   const [questions, setQuestions] = useState<Question[]>([]);
 
   async function fetchData() {
-    const result = await fetch(`/api/messages/${slug}`, {
-      method: "GET",
-    });
+  try {
+    const result = await fetch(`/api/messages/${slug}`);
     const data = await result.json();
-
+    console.log("Fetched questions:", data);
     setQuestions(data.message);
+  } catch (err) {
+    console.error("Fetch error:", err);
   }
+}
+
 
   useEffect(() => {
     fetchData();
   }, [slug]);
 
   return (
-   <div className="space-y-4">
+   <>
       {questions.map((q) => (
         <QuestionCard
           key={q.id}
@@ -29,7 +32,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
           date={new Date(q.createdAt).toLocaleString()}
         />
       ))}
-    </div>
+    </>
 );
 
 }

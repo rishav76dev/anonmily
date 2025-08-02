@@ -20,7 +20,7 @@ model User {
   password String
   messages Message[]
   slug     String    @unique
-  image    String?   
+  image    String?
   bio      String?
 }
 
@@ -32,7 +32,7 @@ model Message {
   user       User?     @relation(fields: [userId], references: [id])
   userId     Int?
   createdAt  DateTime  @default(now())
-  isDisplay  Boolean   @default(false)
+  isDisplay  Boolean   @default(true)
   answeredAt DateTime?
 }
 
