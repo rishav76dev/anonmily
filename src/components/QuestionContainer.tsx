@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { Question } from "@/lib/types";
 import { QuestionCard } from "./QuestionCard";

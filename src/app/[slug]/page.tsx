@@ -1,14 +1,14 @@
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { Textarea } from "@/components/ui/textarea";
 import { UserInfo } from "@/components/UserInfo";
-import { QuestionCard } from "@/components/QuestionCard";
-import { useState } from "react";
 import QuestionForm from "@/components/QuestionForm";
+import QuestionContainer from "@/components/QuestionContainer";
+import { Suspense } from "react";
+
 //this is for visitor to ask question
 
 export default async function Page({ params }: { params: { slug: string } }) {
-  const [question, setQuestion] = useState("")
+
   const { slug } = await params;
 
   const user = await prisma.user.findUnique({
@@ -38,15 +38,9 @@ export default async function Page({ params }: { params: { slug: string } }) {
       </div>
 
       <div className="w-full max-w-[1400px] mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
-        <QuestionCard
-          question="What is the most unexpected compliment you’ve ever received and why?"
-          date="Jul 29, 2025 7:50 PM"
-        />
-        <QuestionCard
-          question="If you could swap lives with someone for a day, who would it be?"
-          date="Jul 30, 2025 12:10 PM"
-        />
-        {/* Add more QuestionCards here */}
+        <Suspense fallback={<p>Loading questions...</p>}>
+          <QuestionContainer slug={slug} />
+        </Suspense>
       </div>
     </div>
   );
