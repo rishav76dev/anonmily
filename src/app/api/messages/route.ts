@@ -19,7 +19,12 @@ export async function POST(req: NextRequest) {
   })
  return NextResponse.json({ success: true, message: questiontext })
 
+ // to post a question we need to pass the which user is question intended for
+//question string too
 }
 
-// to post a question we need to pass the which user is question intended for
-//question string too
+
+
+
+
+

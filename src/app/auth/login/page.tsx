@@ -22,17 +22,6 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { error } = await authClient.signIn.email(
-      {
-        email,
-        password,
-        callbackURL: "/dashboard",
-        rememberMe: true,
-      },
-      {
-        onError: (ctx) => alert(ctx.error.message),
-      }
-    );
   };
 
   return (

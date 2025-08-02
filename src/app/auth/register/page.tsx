@@ -20,23 +20,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const { error } = await authClient.signUp.email(
-      {
-        email,
-        password,
-        name,
-        callbackURL: "/dashboard",
-      },
-      {
-        onRequest: () => {},
-        onSuccess: () => {
-          window.location.href = "/dashboard";
-        },
-        onError: (ctx) => alert(ctx.error.message),
-      }
-    );
+   
   };
 
   return (
