@@ -20,7 +20,7 @@ export default function RegisterPage() {
   const [name, setName] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
-   
+
   };
 
   return (
@@ -40,7 +40,7 @@ export default function RegisterPage() {
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="rishavraj"
+                  placeholder="John Doe"
                   required
                 />
               </div>

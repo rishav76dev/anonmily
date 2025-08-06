@@ -6,33 +6,51 @@ import { QuestionCard } from "./QuestionCard";
 
 export default function QuestionContainer({ slug }: { slug: string }) {
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function fetchData() {
-  try {
-    const result = await fetch(`/api/messages/${slug}`);
-    const data = await result.json();
-    console.log("Fetched questions:", data);
-    setQuestions(data.message);
-  } catch (err) {
-    console.error("Fetch error:", err);
-  }
-}
+    setIsLoading(true);
+    setError(null);
 
+    try {
+      const res = await fetch(`/api/messages/${slug}`);
+      const data = await res.json();
+
+      console.log("Fetched questions:", data);
+
+      // 
+      setQuestions(data.message);
+    } catch (err: unknown) {
+      console.error("Fetch error:", err);
+      const message =
+        err instanceof Error ? err.message : "An unknown error occurred";
+      setError(message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     fetchData();
   }, [slug]);
 
-  return (
-   <>
-      {questions.map((q) => (
-        <QuestionCard
-          key={q.id}
-          question={q.question}
-          date={new Date(q.createdAt).toLocaleString()}
-        />
-      ))}
-    </>
-);
+  if (isLoading) return <p>Loading...</p>;
+  if (error) return <p className="text-red-500">Error: {error}</p>;
 
+  return (
+    <>
+      {questions.length === 0 ? (
+        <p className="text-gray-500">No questions yet.</p>
+      ) : (
+        questions.map((q) => (
+          <QuestionCard
+            key={q.id}
+            question={q.question}
+            date={new Date(q.createdAt).toLocaleString()}
+          />
+        ))
+      )}
+    </>
+  );
 }
