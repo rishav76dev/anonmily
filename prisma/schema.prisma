@@ -32,7 +32,7 @@ model Message {
   user       User?     @relation(fields: [userId], references: [id])
   userId     Int?
   createdAt  DateTime  @default(now())
-  isDisplay  Boolean   @default(true)
+  isDisplay  Boolean   @default(false)
   answeredAt DateTime?
 }
 

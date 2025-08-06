@@ -10,7 +10,7 @@ export async function PUT(
   const { answer } = await req.json();
   const answertext = await prisma.message.update({
     where: { id: Number(params.id) },
-    data: { answer, isAnswered: true },
+    data: { answer, isAnswered: true, isDisplay: true },
   });
 
   return NextResponse.json({ success: true, answertext });
