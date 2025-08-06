@@ -8,9 +8,10 @@ interface QuestionCardProps {
   question: string;
   date: string;
   onClose?: () => void;
+  id: string;
 }
 
-export function QuestionCard({ question, date, onClose }: QuestionCardProps) {
+export function QuestionCard({ question, date, onClose, id}: QuestionCardProps) {
   const [visible, setVisible] = useState(true);
 
   if (!visible) return null;
@@ -19,20 +20,28 @@ export function QuestionCard({ question, date, onClose }: QuestionCardProps) {
     <div className="rounded-lg border shadow-sm p-4 bg-white dark:bg-muted space-y-3">
       <div className="flex items-start gap-4">
         {/* Icon bubble */}
-        <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "#FEF3CD" }}>
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center"
+          style={{ background: "#FEF3CD" }}
+        >
           <i className="fa fa-comment text-yellow-700 text-sm"></i>
         </div>
 
         {/* Content */}
         <div className="flex-1">
-          <span className="block text-base font-medium text-gray-800 dark:text-white">{question}</span>
+          <span className="block text-base font-medium text-gray-800 dark:text-white">
+            {question}
+          </span>
 
           <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mt-2">
             <div className="flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {date}
             </div>
-            <Link href="/Answer/51696746" className="cursor-pointer hover:underline text-purple-600 dark:text-purple-400 flex items-center gap-1">
+            <Link
+              href={`/Answer/${id}`}
+              className="cursor-pointer hover:underline text-purple-600 dark:text-purple-400 flex items-center gap-1"
+            >
               Answered <Send className="w-3 h-3" />
             </Link>
           </div>

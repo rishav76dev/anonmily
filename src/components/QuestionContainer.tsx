@@ -19,7 +19,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
 
       console.log("Fetched questions:", data);
 
-      // 
+      //
       setQuestions(data.message);
     } catch (err: unknown) {
       console.error("Fetch error:", err);
@@ -46,6 +46,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
         questions.map((q) => (
           <QuestionCard
             key={q.id}
+            id={q.id}
             question={q.question}
             date={new Date(q.createdAt).toLocaleString()}
           />
