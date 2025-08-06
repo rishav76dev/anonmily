@@ -14,7 +14,7 @@ export default function AnswerForm({ id }: { id: string }) {
     }
 
     try {
-      const res = await fetch(`/api/message/${id}`, {
+      const res = await fetch(`/api/messages/answer/${id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

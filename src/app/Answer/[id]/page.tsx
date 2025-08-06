@@ -1,13 +1,20 @@
 // app/answer/[id]/page.tsx
+import { cookies } from "next/headers";
+import { getUserFromToken } from "@/lib/utils";
 
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { MessageCircle, Clock, Info, Send } from "lucide-react";
+import { MessageCircle, Clock} from "lucide-react";
 import AnswerForm from "@/components/AnswerForm";
 
 export default async function AnswerPage(props: { params: { id: string } }) {
-  const { id } = await Promise.resolve(props.params); 
+  const { id } = await Promise.resolve(props.params);
   const messageId = parseInt(id);
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const user = getUserFromToken(token);
+
+  if (!user) return notFound();
 
   if (isNaN(messageId)) {
     return notFound();
@@ -17,9 +24,10 @@ export default async function AnswerPage(props: { params: { id: string } }) {
     where: { id: messageId },
   });
 
-  if (!message) {
-    return notFound();
+  if (!message || message.userId !== user.userId) {
+    return notFound(); // ❗ Enforce ownership
   }
+
 
   return (
     <div className="min-h-screen bg-white flex justify-center items-center px-4 py-8">
@@ -66,3 +74,5 @@ export default async function AnswerPage(props: { params: { id: string } }) {
     </div>
   );
 }
+
+
