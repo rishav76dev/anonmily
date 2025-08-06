@@ -10,7 +10,7 @@ export default function QuestionForm({ slug }: { slug: string }) {
   const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/message", {
+    const res = await fetch("/api/messages", {
       method: "POST",
       body: JSON.stringify({ question, slug }),
       headers: { "Content-Type": "application/json" },
