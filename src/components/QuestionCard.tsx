@@ -46,7 +46,7 @@ export function QuestionCard({
               {date}
             </div>
             <Link
-              href={`/Answer/${id}`}
+              href={`/answer/${id}`}
               className="cursor-pointer hover:underline text-purple-600 dark:text-purple-400 flex items-center gap-1"
             >
               Answered <Send className="w-3 h-3" />
@@ -56,10 +56,9 @@ export function QuestionCard({
           <hr className="my-2 border-gray-300 dark:border-gray-700" />
 
           {answer && (
-            <div className="right-0 text-sm text-gray-800 dark:text-gray-200 mt-2 text-right ">
-              <div className="font-semibold mb-1 ">Answer:</div>
+            <div className="right-0 text-base text-gray-800 dark:text-gray-200 text-right ">
+              <div className="font-normal mb-1 ">Answer:</div>
               <div>{answer}</div>
-              <div className="text-xs text-gray-500 mt-1">{answeredAt}</div>
             </div>
           )}
 
