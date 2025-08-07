@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 import {
   Card,
@@ -13,15 +14,17 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
-   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -39,12 +42,16 @@ export default function LoginPage() {
         return;
       }
 
-      alert("You have logged in")
-      // Login successful, redirect
-      // or wherever your post-login page is
+      // Clear form and redirect
+      setEmail("");
+      setPassword("");
+      alert("User logged in");
+      // TODO: Use Next.js router to redirect
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -74,16 +81,20 @@ export default function LoginPage() {
                 <Input
                   id="password"
                   type="password"
+                  autoComplete="current-password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                 />
               </div>
+              {error && (
+                <p className="text-sm text-red-500 mt-2 text-center">{error}</p>
+              )}
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-2">
-            <Button type="submit" className="w-full">
-              Log In
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Logging in..." : "Log In"}
             </Button>
             <p className="text-sm">
               Don&#39;t have an account?{" "}
