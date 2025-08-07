@@ -1,4 +1,3 @@
-// app/answer/[id]/page.tsx
 import { cookies } from "next/headers";
 import { getUserFromToken } from "@/lib/utils";
 
