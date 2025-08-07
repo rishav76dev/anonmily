@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, Send, Share2, Trash2, X } from "lucide-react";
+import { Clock, Send, Share2, Trash2, X, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 interface QuestionCardProps {
@@ -35,7 +35,7 @@ export function QuestionCard({
           className="w-10 h-10 rounded-full flex items-center justify-center"
           style={{ background: "#FEF3CD" }}
         >
-          <i className="fa fa-comment text-yellow-700 text-sm"></i>
+          <MessageCircle className="w-8 h-8" />
         </div>
 
         <div className="flex-1">
