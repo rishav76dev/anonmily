@@ -4,7 +4,7 @@ import { getUserFromToken } from "@/lib/utils";
 
 import { prisma } from "@/lib/db";
 import { notFound } from "next/navigation";
-import { MessageCircle, Clock} from "lucide-react";
+import { MessageCircle, Clock } from "lucide-react";
 import AnswerForm from "@/components/AnswerForm";
 
 export default async function AnswerPage(props: { params: { id: string } }) {
@@ -25,9 +25,8 @@ export default async function AnswerPage(props: { params: { id: string } }) {
   });
 
   if (!message || message.userId !== user.userId) {
-    return notFound(); // ❗ Enforce ownership
+    return notFound();
   }
-
 
   return (
     <div className="min-h-screen bg-white flex justify-center items-center px-4 py-8">
@@ -67,12 +66,20 @@ export default async function AnswerPage(props: { params: { id: string } }) {
             </div>
           </div>
 
-          {/* Form */}
-          <AnswerForm id={message.id.toString()} />
+          {/* answer sectio */}
+
+          {message.answer ? (
+            <div className="bg-green-50 border border-green-300 p-4 rounded-xl">
+              <h5 className="font-semibold mb-2 text-green-800">
+                Already Answered
+              </h5>
+              <p className="text-sm text-gray-800">{message.answer}</p>
+            </div>
+          ) : (
+            <AnswerForm id={message.id.toString()} />
+          )}
         </div>
       </div>
     </div>
   );
 }
-
-

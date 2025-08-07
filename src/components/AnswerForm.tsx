@@ -2,10 +2,14 @@
 
 import { Info, Send } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function AnswerForm({ id }: { id: string }) {
   const [answer, setAnswer] = useState("");
   const [charCount, setCharCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+const router = useRouter();
 
   const handleAnswerSubmit = async () => {
     if (!answer.trim()) {
@@ -26,6 +30,7 @@ export default function AnswerForm({ id }: { id: string }) {
         alert("Answer submitted successfully!");
         setAnswer("");
         setCharCount(0);
+         router.refresh();
       } else {
         alert("Failed to submit answer.");
       }
