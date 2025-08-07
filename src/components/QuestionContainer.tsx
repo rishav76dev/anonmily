@@ -46,9 +46,13 @@ export default function QuestionContainer({ slug }: { slug: string }) {
         questions.map((q) => (
           <QuestionCard
             key={q.id}
-            id={q.id}
+            id={q.id.toString()}
             question={q.question}
             date={new Date(q.createdAt).toLocaleString()}
+            answer={q.answer}
+            answeredAt={
+              q.answeredAt ? new Date(q.answeredAt).toLocaleString() : undefined
+            }
           />
         ))
       )}

@@ -1,25 +1,33 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, Send, Share2, Ban, Trash2, X } from "lucide-react";
+import { Clock, Send, Share2, Trash2, X } from "lucide-react";
 import Link from "next/link";
 
 interface QuestionCardProps {
+  id: string;
   question: string;
   date: string;
+  answer?: string;
+  answeredAt?: string;
   onClose?: () => void;
-  id: string;
 }
 
-export function QuestionCard({ question, date, onClose, id}: QuestionCardProps) {
+export function QuestionCard({
+  id,
+  question,
+  date,
+  answer,
+  answeredAt,
+  onClose,
+}: QuestionCardProps) {
   const [visible, setVisible] = useState(true);
 
   if (!visible) return null;
 
   return (
-    <div className="rounded-lg border shadow-sm p-4 bg-white dark:bg-muted space-y-3">
+    <div className="rounded-lg border shadow-sm p-4 bg-white dark:bg-muted space-y-3 relative">
       <div className="flex items-start gap-4">
-        {/* Icon bubble */}
         <div
           className="w-10 h-10 rounded-full flex items-center justify-center"
           style={{ background: "#FEF3CD" }}
@@ -27,7 +35,6 @@ export function QuestionCard({ question, date, onClose, id}: QuestionCardProps) 
           <i className="fa fa-comment text-yellow-700 text-sm"></i>
         </div>
 
-        {/* Content */}
         <div className="flex-1">
           <span className="block text-base font-medium text-gray-800 dark:text-white">
             {question}
@@ -48,9 +55,16 @@ export function QuestionCard({ question, date, onClose, id}: QuestionCardProps) 
 
           <hr className="my-2 border-gray-300 dark:border-gray-700" />
 
-          {/* Actions */}
-          <div className="flex justify-end items-center gap-2">
-            <Link href="/Share/51696746">
+          {answer && (
+            <div className="right-0 text-sm text-gray-800 dark:text-gray-200 mt-2 text-right ">
+              <div className="font-semibold mb-1 ">Answer:</div>
+              <div>{answer}</div>
+              <div className="text-xs text-gray-500 mt-1">{answeredAt}</div>
+            </div>
+          )}
+
+          <div className="flex justify-end items-center gap-2 mt-4">
+            <Link href={`/Share/${id}`}>
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: "#E6D4E9", color: "#816B82" }}
@@ -59,15 +73,6 @@ export function QuestionCard({ question, date, onClose, id}: QuestionCardProps) 
                 <Share2 className="w-4 h-4" />
               </div>
             </Link>
-
-            <button
-              onClick={() => alert("Blocked")}
-              className="w-8 h-8 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "#FEF3CD", color: "#856417" }}
-              title="Block Sender"
-            >
-              <Ban className="w-4 h-4" />
-            </button>
 
             <button
               onClick={() => setVisible(false)}
@@ -81,7 +86,6 @@ export function QuestionCard({ question, date, onClose, id}: QuestionCardProps) 
         </div>
       </div>
 
-      {/* Close button (optional X) */}
       {onClose && (
         <button
           onClick={() => {
