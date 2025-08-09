@@ -5,8 +5,9 @@ import { NextResponse } from "next/server";
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const payload = getUserFromToken(token);
@@ -16,7 +17,7 @@ export async function DELETE(
   }
 
   const message = await prisma.message.findUnique({
-    where: { id: Number(params.id) },
+    where: { id: Number(id) },
   });
 
   if (!message || message.userId !== payload.userId) {
@@ -24,7 +25,7 @@ export async function DELETE(
   }
 
   await prisma.message.delete({
-    where: { id: Number(params.id) },
+    where: { id: Number(id) },
   });
 
   return NextResponse.json({ success: true });

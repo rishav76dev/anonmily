@@ -3,23 +3,23 @@ import { prisma } from "@/lib/db";
 export default async function SharePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const id = Number(params.id);
+  const { id: idParam } = await params;
+  const id = Number(idParam);
 
   if (Number.isNaN(id)) {
     return <div>Invalid question ID</div>;
   }
 
   const question = await prisma.message.findUnique({
-    where: { id }, // ✅ now it's a number
+    where: { id },
   });
 
   if (!question) {
     return <div>Question not found</div>;
   }
 
-  // Optional: only display if `isDisplay` is true
   if (!question.isDisplay) {
     return <div>This question is not public.</div>;
   }
