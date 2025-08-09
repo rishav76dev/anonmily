@@ -36,7 +36,7 @@ export default async function Page(props: { params: { slug: string } }) {
       </div>
       </div>
 
-      <div className="w-full max-w-[1440px] mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="w-full mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
         <QuestionContainer slug={slug} />
       </div>
     </div>

@@ -28,54 +28,45 @@ export default async function AnswerPage(props: { params: { id: string } }) {
   }
 
   return (
-    <div className="min-h-screen bg-white flex justify-center items-center px-4 py-8">
-      <div className="w-full max-w-2xl bg-white border border-gray-300 rounded-2xl shadow-lg">
+    <div className="min-h-screen bg-gray-50 flex justify-center items-center px-4 py-8">
+      <div className="w-full max-w-2xl bg-white rounded-2xl shadow-lg border border-gray-200">
         <div className="p-6 space-y-6">
           {/* Header */}
-          <div className="bg-black border border-gray-300 rounded-xl p-3">
-            <h4 className="text-white text-lg font-semibold flex items-center gap-2">
-              <MessageCircle size={20} />
-              Answer Message
-            </h4>
-          </div>
+          <h4 className="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            <MessageCircle size={24} className="text-indigo-600" />
+            Answer Message
+          </h4>
 
-          <hr className="border-gray-300" />
-
-          {/* Message */}
-          <div className="bg-gray-50 border border-gray-300 p-4 rounded-xl">
-            <div className="flex gap-4">
-              <div className="relative text-black">
-                <MessageCircle size={20} />
+          {/* Question */}
+          <div className="bg-gray-50 border border-gray-200 p-5 rounded-xl shadow-sm">
+            <p className="text-lg text-gray-800 mb-3">{message.question}</p>
+            <div className="flex justify-between text-gray-500 text-sm">
+              <div className="flex items-center gap-1">
+                <Clock size={14} />
+                {new Date(message.createdAt).toLocaleDateString()}
               </div>
-              <div className="flex-1 text-sm text-black">
-                <p className="mb-2">{message.question}</p>
-                <div className="flex justify-between text-gray-600 text-xs">
-                  <div className="flex items-center gap-1">
-                    <Clock size={12} />
-                    {new Date(message.createdAt).toLocaleDateString()}
-                  </div>
-                  <button
-                    className="text-black hover:underline"
-                    title="Unanswered"
-                  >
-                    {message.answer ? "Answered" : "Unanswered"}
-                  </button>
-                </div>
-              </div>
+              <span
+                className={`font-medium ${
+                  message.answer ? "text-green-600" : "text-red-500"
+                }`}
+              >
+                {message.answer ? "Answered" : "Unanswered"}
+              </span>
             </div>
           </div>
 
-          {/* answer sectio */}
-
+          {/* Answer Section */}
           {message.answer ? (
-            <div className="bg-green-50 border border-green-300 p-4 rounded-xl">
-              <h5 className="font-semibold mb-2 text-green-800">
-                Already Answered
+            <div className="bg-green-50 border border-green-200 p-5 rounded-xl shadow-sm">
+              <h5 className="text-green-700 font-semibold mb-2 flex items-center gap-2">
+                ✅ Already Answered
               </h5>
-              <p className="text-sm text-gray-800">{message.answer}</p>
+              <p className="text-gray-800 leading-relaxed">{message.answer}</p>
             </div>
           ) : (
-            <AnswerForm id={message.id.toString()} />
+            <div className="bg-white border border-gray-200 p-5 rounded-xl shadow-sm">
+              <AnswerForm id={message.id.toString()} />
+            </div>
           )}
         </div>
       </div>

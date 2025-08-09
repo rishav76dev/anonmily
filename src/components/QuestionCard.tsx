@@ -8,9 +8,11 @@ interface QuestionCardProps {
   id: string;
   question: string;
   date: string;
-  answer?: string;
+  answer?: string| null;
   answeredAt?: string;
   isOwner?: boolean;
+ className?: string;
+
 }
 
 export function QuestionCard({
@@ -20,6 +22,7 @@ export function QuestionCard({
   answer,
   answeredAt,
   isOwner,
+   className = "",
 }: QuestionCardProps) {
   const [visible, setVisible] = useState(true);
 
@@ -44,73 +47,74 @@ export function QuestionCard({
   if (!visible) return null;
 
   return (
-    <div className="rounded-lg border shadow-sm p-4 bg-white dark:bg-muted space-y-3 relative">
+    <div className="rounded-2xl border border-gray-200 shadow-md p-5 bg-white space-y-4">
       <div className="flex items-start gap-4">
-        <div
-          className="w-10 h-10 rounded-full flex items-center justify-center"
-          style={{ background: "#FEF3CD" }}
-        >
-          <MessageCircle className="w-8 h-8" />
+        {/* Icon */}
+        <div className="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100">
+          <MessageCircle className="w-6 h-6 text-purple-600" />
         </div>
 
+        {/* Question Content */}
         <div className="flex-1">
-          <span className="block text-base font-medium text-gray-800 dark:text-white">
-            {question}
-          </span>
+          {/* Top row: Question + Actions */}
+          <div className="flex justify-between items-start">
+            <span className="block text-lg font-semibold text-gray-800">
+              {question}
+            </span>
 
-          <div className="flex justify-between items-center text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <div className="flex items-center gap-3">
+              <Link href={`/share/${id}`}>
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 text-purple-700 hover:bg-purple-200 transition"
+                  title="Share"
+                >
+                  <Share2 className="w-4 h-4" />
+                </div>
+              </Link>
+
+              {isOwner && (
+                <button
+                  onClick={handleDelete}
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 text-red-600 hover:bg-red-200 transition"
+                  title="Delete"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* Metadata */}
+          <div className="flex justify-between items-center text-sm text-gray-500 mt-2">
             <div className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
+              <Clock className="w-4 h-4" />
               {date}
             </div>
 
             {isAnswered ? (
               <Link
                 href={`/answer/${id}`}
-                className="cursor-pointer hover:underline text-purple-600 dark:text-purple-400 flex items-center gap-1"
+                className="cursor-pointer font-medium text-green-600 hover:underline flex items-center gap-1"
               >
-                Answered <Send className="w-3 h-3" />
+                Answered <Send className="w-4 h-4" />
               </Link>
             ) : (
               <Link
                 href={`/answer/${id}`}
-                className="cursor-pointer hover:underline text-blue-600 dark:text-blue-400 flex items-center gap-1"
+                className="cursor-pointer font-medium text-blue-600 hover:underline flex items-center gap-1"
               >
-                Reply now <Send className="w-3 h-3" />
+                Reply now <Send className="w-4 h-4" />
               </Link>
             )}
           </div>
 
+          {/* Answer Section */}
           {isAnswered && (
-            <>
-              <hr className="my-2 border-gray-300 dark:border-gray-700" />
-              <div className="right-0 text-base text-gray-800 dark:text-gray-200 text-right">
-                <div className="font-normal mb-1">Answer:</div>
-                <div>{answer}</div>
-              </div>
-            </>
+            <div className="mt-4 bg-green-50 border border-green-200 p-4 rounded-xl shadow-sm">
+              <div className="text-green-700 font-medium mb-1">Answer:</div>
+              <div className="text-gray-800">{answer}</div>
+            </div>
           )}
-
-          <div className="flex justify-end items-center gap-2 mt-4">
-            <Link href={`/Share/${id}`}>
-              <div
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 text-purple-700"
-                title="Share"
-              >
-                <Share2 className="w-4 h-4" />
-              </div>
-            </Link>
-
-            {isOwner && (
-              <button
-                onClick={handleDelete}
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 text-red-600"
-                title="Delete"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            )}
-          </div>
         </div>
       </div>
     </div>
