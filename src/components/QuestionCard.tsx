@@ -20,9 +20,7 @@ export function QuestionCard({
   question,
   date,
   answer,
-  answeredAt,
   isOwner,
-   className = "",
 }: QuestionCardProps) {
   const [visible, setVisible] = useState(true);
 

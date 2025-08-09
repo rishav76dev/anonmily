@@ -4,39 +4,35 @@ import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
 
-
-//this is for visitor to ask question
 export default async function Page(props: { params: { slug: string } }) {
   const { slug } = await Promise.resolve(props.params);
-  const user = await prisma.user.findUnique({
-    where: { slug },
-  });
+  const user = await prisma.user.findUnique({ where: { slug } });
 
-  if (!user) {
-    notFound();
-  }
+  if (!user) notFound();
 
   return (
-    <div className="flex flex-col">
-      <div className="flex  justify-center">
-      <div className="w-full max-w-[600px] px-4">
+    <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-black text-white">
+      <div className="w-full max-w-[600px] px-4 mt-10">
         {/* user profile */}
         <UserInfo
           user={{
-            username: user.name ?? "Anonymous",
+            username: user.username ?? "Anonymous",
             image: user.image,
             bio: user.bio,
           }}
         />
 
         {/* question input */}
-
-        <p className="pl-1">Send an anonymous message</p>
-        <QuestionForm slug={slug} />
+        <div className="bg-white/5 p-5 rounded-xl shadow-md border border-white/10 mb-6">
+          <p className="text-lg font-medium text-purple-300 mb-2">
+            Send an anonymous message
+          </p>
+          <QuestionForm slug={slug} />
+        </div>
       </div>
-      </div>
 
-      <div className="w-full mt-8 px-8 grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* questions */}
+      <div className="w-full max-w-[1200px] mt-8 px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
         <QuestionContainer slug={slug} />
       </div>
     </div>

@@ -32,6 +32,27 @@ export default function QuestionContainer({ slug }: { slug: string }) {
   }
 
   useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch(`/api/messages/${slug}`);
+        const data = await res.json();
+
+        console.log("Fetched questions:", data);
+
+        //
+        setQuestions(data.message);
+      } catch (err: unknown) {
+        console.error("Fetch error:", err);
+        const message =
+          err instanceof Error ? err.message : "An unknown error occurred";
+        setError(message);
+      } finally {
+        setIsLoading(false);
+      }
+    }
     fetchData();
   }, [slug]);
 
@@ -53,7 +74,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
             answeredAt={
               q.answeredAt ? new Date(q.answeredAt).toLocaleString() : undefined
             }
-            
+
           />
         ))
       )}
