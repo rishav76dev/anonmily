@@ -20,12 +20,12 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const router = useRouter();
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const res = await fetch("api/auth/register", {
+      const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
