@@ -4,8 +4,12 @@ import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
 
-export default async function Page(props: { params: { slug: string } }) {
-  const { slug } = await Promise.resolve(props.params);
+export default async function Page({
+  params
+}: {
+  params: Promise<{ slug: string }>
+}) {
+  const { slug } = await params;
   const user = await prisma.user.findUnique({ where: { slug } });
 
   if (!user) notFound();

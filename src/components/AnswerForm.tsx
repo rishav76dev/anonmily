@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 export default function AnswerForm({ id }: { id: string }) {
   const [answer, setAnswer] = useState("");
   const [charCount, setCharCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
 
 const router = useRouter();
 
