@@ -6,8 +6,12 @@ import { notFound } from "next/navigation";
 import { MessageCircle, Clock } from "lucide-react";
 import AnswerForm from "@/components/AnswerForm";
 
-export default async function AnswerPage(props: { params: { id: string } }) {
-  const { id } = await Promise.resolve(props.params);
+export default async function AnswerPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
   const messageId = parseInt(id);
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;

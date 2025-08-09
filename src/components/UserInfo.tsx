@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 type User = {
   username: string;
   image?: string | null;
@@ -8,9 +10,11 @@ export function UserInfo({ user }: { user: User }) {
   return (
     <div className="flex flex-col items-center gap-4 mb-10 p-6 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20">
       {user.image && (
-        <img
+        <Image
           src={user.image}
           alt={user.username}
+          width={96}
+          height={96}
           className="w-24 h-24 rounded-full object-cover border-4 border-purple-500 shadow-lg"
         />
       )}
