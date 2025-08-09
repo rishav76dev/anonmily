@@ -5,7 +5,7 @@ import { notFound } from "next/navigation";
 import { QuestionCard } from "@/components/QuestionCard";
 
 export default async function AnswerDashboard() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
   const payload = getUserFromToken(token);
 
@@ -44,6 +44,7 @@ export default async function AnswerDashboard() {
               question={msg.question}
               date={new Date(msg.createdAt).toLocaleDateString()}
               answer={msg.answer || undefined}
+              isOwner={true} 
               answeredAt={
                 msg.answer && msg.answeredAt
                   ? new Date(msg.answeredAt).toLocaleDateString()

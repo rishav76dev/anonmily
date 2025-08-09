@@ -53,6 +53,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
             answeredAt={
               q.answeredAt ? new Date(q.answeredAt).toLocaleString() : undefined
             }
+            
           />
         ))
       )}

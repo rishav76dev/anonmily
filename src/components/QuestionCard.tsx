@@ -10,7 +10,7 @@ interface QuestionCardProps {
   date: string;
   answer?: string;
   answeredAt?: string;
-  onClose?: () => void;
+  isOwner?: boolean;
 }
 
 export function QuestionCard({
@@ -19,12 +19,27 @@ export function QuestionCard({
   date,
   answer,
   answeredAt,
-  onClose,
+  isOwner,
 }: QuestionCardProps) {
   const [visible, setVisible] = useState(true);
 
   // ✅ FIX: check if answer is truly non-empty
   const isAnswered = !!answer && answer.trim().length > 0;
+
+  const handleDelete = async () => {
+    try {
+      const res = await fetch(`/api/messages/delete/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        setVisible(false);
+      } else {
+        console.error("Delete failed:", await res.text());
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    }
+  };
 
   if (!visible) return null;
 
@@ -79,38 +94,25 @@ export function QuestionCard({
           <div className="flex justify-end items-center gap-2 mt-4">
             <Link href={`/Share/${id}`}>
               <div
-                className="w-8 h-8 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: "#E6D4E9", color: "#816B82" }}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 text-purple-700"
                 title="Share"
               >
                 <Share2 className="w-4 h-4" />
               </div>
             </Link>
 
-            <button
-              onClick={() => setVisible(false)}
-              className="w-8 h-8 rounded-full flex items-center justify-center"
-              style={{ backgroundColor: "#F8D7DA", color: "#D95C5C" }}
-              title="Delete"
-            >
-              <Trash2 className="w-4 h-4" />
-            </button>
+            {isOwner && (
+              <button
+                onClick={handleDelete}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 text-red-600"
+                title="Delete"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            )}
           </div>
         </div>
       </div>
-
-      {onClose && (
-        <button
-          onClick={() => {
-            setVisible(false);
-            onClose();
-          }}
-          className="absolute top-2 right-2 text-gray-400 hover:text-gray-600 dark:hover:text-white"
-          title="Close"
-        >
-          <X className="w-4 h-4" />
-        </button>
-      )}
     </div>
   );
 }
