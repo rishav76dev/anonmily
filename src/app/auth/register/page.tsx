@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -18,9 +19,37 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
-
+  const router = useRouter();
+  
   const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
+    try {
+      const res = await fetch("api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username: name,
+          email,
+          password,
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        console.error("Registration failed:", error);
+        return;
+      }
+
+      const data = await res.json();
+      console.log("User registered:", data);
+
+      router.push("/auth/login");
+    } catch (error) {
+      console.error("Error registering:", error);
+    }
   };
 
   return (

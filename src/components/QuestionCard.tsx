@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Clock, Send, Share2, Trash2, X, MessageCircle } from "lucide-react";
+import { Clock, Send, Share2, Trash2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 
 interface QuestionCardProps {
