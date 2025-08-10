@@ -14,10 +14,7 @@ export default async function AnswerDashboard() {
 
   const dbUser = await prisma.user.findUnique({
     where: { id: payload.userId },
-    select: {
-      id: true,
-      username: true,
-    },
+    select: { id: true, username: true },
   });
 
   if (!dbUser) return notFound();
@@ -28,20 +25,24 @@ export default async function AnswerDashboard() {
   });
 
   return (
-    <div className="min-h-screen px-6 py-10 bg-gray-50">
+    <div className="min-h-screen px-6 py-10 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-3xl mx-auto space-y-4">
+        {/* Header */}
         <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
-          <span className="text-gray-900 tracking-tight">Your Questions</span>
-          <span className="bg-indigo-100 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-medium border border-indigo-200 shadow-sm">
+          <span className="text-gray-900 dark:text-gray-100 tracking-tight">
+            Your Questions
+          </span>
+          <span className="bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-200 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-medium border border-indigo-200 dark:border-indigo-700 shadow-sm">
             @{dbUser.username}
           </span>
         </h1>
 
+        {/* If no questions */}
         {messages.length === 0 ? (
           <div className="flex flex-col items-center text-center py-20">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="w-16 h-16 text-gray-300 mb-4"
+              className="w-16 h-16 text-gray-300 dark:text-gray-600 mb-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -54,12 +55,12 @@ export default async function AnswerDashboard() {
               />
             </svg>
 
-            <p className="text-lg font-semibold text-gray-700 mb-1">
+            <p className="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">
               No questions yet
             </p>
-            <p className="text-sm text-gray-500 max-w-sm">
-              📢 Share your profile link and start receiving anonymous questions
-              from friends and followers.
+            <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm">
+              📢 Share your profile link and start receiving anonymous
+              questions from friends and followers.
             </p>
 
             <button className="mt-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full shadow-md hover:shadow-lg transition">
@@ -91,8 +92,8 @@ export default async function AnswerDashboard() {
                   }
                   className={
                     msg.answer
-                      ? "border-green-200 bg-green-50"
-                      : "border-gray-200 bg-white"
+                      ? "border-green-200 bg-green-50 dark:bg-green-900/30"
+                      : "border-gray-200 bg-white dark:bg-gray-800"
                   }
                 />
               ))}
@@ -110,11 +111,11 @@ export default async function AnswerDashboard() {
                       question={msg.question}
                       date={new Date(msg.createdAt).toLocaleDateString()}
                       isOwner={true}
-                      className="border-gray-200 bg-white"
+                      className="border-gray-200 bg-white dark:bg-gray-800"
                     />
                   ))
               ) : (
-                <p className="text-gray-500 text-center py-10">
+                <p className="text-gray-500 dark:text-gray-400 text-center py-10">
                   No unanswered questions.
                 </p>
               )}
@@ -138,11 +139,11 @@ export default async function AnswerDashboard() {
                           ? new Date(msg.answeredAt).toLocaleDateString()
                           : undefined
                       }
-                      className="border-green-200 bg-green-50"
+                      className="border-green-200 bg-green-50 dark:bg-green-900/30"
                     />
                   ))
               ) : (
-                <p className="text-gray-500 text-center py-10">
+                <p className="text-gray-500 dark:text-gray-400 text-center py-10">
                   No answered questions yet.
                 </p>
               )}

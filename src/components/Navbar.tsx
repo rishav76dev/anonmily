@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { Switch } from "@/components/ui/switch";
+import { ThemeSwitch } from "@/components/ui/switch";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -25,7 +25,7 @@ export default function Navbar() {
         </Link>
 
         <div className="flex items-center space-x-4">
-          <Switch />
+          <ThemeSwitch />
 
           {/* <!-- Auth Button --> */}
           <Link href="/auth/login">
