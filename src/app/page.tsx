@@ -1,8 +1,9 @@
-import LandingPage from "@/components/LandingPage";
+import { LandingPage } from "@/components/LandingPage";
 
 
 export default function Home() {
-  return (
+  return (<div className="mt-52">
     <LandingPage />
+    </div>
   );
 }

@@ -4,18 +4,15 @@ import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
 
-export default async function Page({
-  params
-}: {
-  params: Promise<{ slug: string }>
-}) {
+// PAGE
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const user = await prisma.user.findUnique({ where: { slug } });
 
   if (!user) notFound();
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-gradient-to-b from-gray-900 via-purple-900 to-black text-white">
+    <div className="flex flex-col items-center min-h-screen bg-background text-foreground transition-colors">
       <div className="w-full max-w-[600px] px-4 mt-10">
         {/* user profile */}
         <UserInfo
@@ -27,8 +24,8 @@ export default async function Page({
         />
 
         {/* question input */}
-        <div className="bg-white/5 p-5 rounded-xl shadow-md border border-white/10 mb-6">
-          <p className="text-lg font-medium text-purple-300 mb-2">
+        <div className="bg-card p-5 rounded-xl shadow-md border border-border mb-6 transition-colors">
+          <p className="text-lg font-medium text-primary mb-2">
             Send an anonymous message
           </p>
           <QuestionForm slug={slug} />
