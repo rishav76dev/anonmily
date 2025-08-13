@@ -1,7 +1,7 @@
 "use client";
 
 export default function CopyLink({ slug }: { slug: string }) {
-  const link = `https://anonliy.com/${slug}`;
+  const link = `https://anonmily.vercel.app/${slug}`;
 
   return (
     <div className="bg-card p-4 rounded-xl shadow-md border border-border mb-6 flex items-center justify-between gap-2">
