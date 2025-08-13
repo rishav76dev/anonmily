@@ -3,13 +3,23 @@ import { notFound } from "next/navigation";
 import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
+import CopyLink from "@/components/CopyLink";
 
-// PAGE
-export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+export default async function Page({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
   const { slug } = await params;
   const user = await prisma.user.findUnique({ where: { slug } });
 
   if (!user) notFound();
+  // const cookieStore = await cookies();
+  // const token = cookieStore.get("token")?.value;
+
+  // const loggedInUser = getUserFromToken(token);
+
+  // const isOwner = loggedInUser?.userId === user.id;
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background text-foreground transition-colors">
@@ -22,6 +32,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
             bio: user.bio,
           }}
         />
+
+        <CopyLink slug={slug} />
 
         {/* question input */}
         <div className="bg-card p-5 rounded-xl shadow-md border border-border mb-6 transition-colors">
