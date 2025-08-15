@@ -4,12 +4,12 @@ import * as React from "react"
 import * as SwitchPrimitive from "@radix-ui/react-switch"
 import { useTheme } from "next-themes"
 import { cn } from "@/lib/utils"
+import { Moon, Sun } from "lucide-react"
 
 function ThemeSwitch({ className }: { className?: string }) {
   const { theme, setTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
-  // To avoid hydration mismatch
   React.useEffect(() => setMounted(true), [])
 
   if (!mounted) return null
@@ -19,15 +19,48 @@ function ThemeSwitch({ className }: { className?: string }) {
       checked={theme === "dark"}
       onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
       className={cn(
-        "peer data-[state=checked]:bg-primary data-[state=unchecked]:bg-input focus-visible:border-ring focus-visible:ring-ring/50 dark:data-[state=unchecked]:bg-input/80 inline-flex h-[1.15rem] w-8 shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        "peer relative inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-gray-800 data-[state=unchecked]:bg-yellow-200",
         className
       )}
     >
-      <SwitchPrimitive.Thumb
+      {/* Background icons */}
+      <Sun
+        size={14}
         className={cn(
-          "bg-background dark:data-[state=unchecked]:bg-foreground dark:data-[state=checked]:bg-primary-foreground pointer-events-none block size-4 rounded-full ring-0 transition-transform data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
+          "absolute left-1 text-white transition-opacity duration-200",
+          theme === "dark" ? "opacity-0" : "opacity-100"
         )}
       />
+      <Moon
+        size={14}
+        className={cn(
+          "absolute right-1 text-white transition-opacity duration-200",
+          theme === "dark" ? "opacity-100" : "opacity-0"
+        )}
+      />
+
+      {/* Moving thumb with icon */}
+      <SwitchPrimitive.Thumb
+        className={cn(
+          "pointer-events-none relative block h-5 w-5 rounded-full bg-white shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 flex items-center justify-center"
+        )}
+      >
+        {/* Active icon on the thumb */}
+        <Sun
+          size={12}
+          className={cn(
+            "absolute text-yellow-500 transition-opacity duration-200",
+            theme === "dark" ? "opacity-0" : "opacity-100"
+          )}
+        />
+        <Moon
+          size={12}
+          className={cn(
+            "absolute text-gray-700 transition-opacity duration-200",
+            theme === "dark" ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </SwitchPrimitive.Thumb>
     </SwitchPrimitive.Root>
   )
 }

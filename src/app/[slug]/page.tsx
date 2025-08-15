@@ -45,8 +45,14 @@ export default async function Page({
       </div>
 
       {/* questions */}
-      <div className="w-full max-w-[1200px] mt-8 px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <QuestionContainer slug={slug} />
+      <div>
+        <h1 className="flex justify-center mt-10 text-4xl font-bold text-gray-800 tracking-wide dark:text-white">
+          Answered Questions
+        </h1>
+
+        <div className="w-full max-w-[1200px] mt-8 px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+          <QuestionContainer slug={slug} />
+        </div>
       </div>
     </div>
   );

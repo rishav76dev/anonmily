@@ -39,6 +39,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
 
   return (
     <>
+    
       {questions.length === 0 ? (
         <p className="text-gray-500">No questions yet.</p>
       ) : (
