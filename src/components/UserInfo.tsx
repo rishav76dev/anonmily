@@ -1,4 +1,3 @@
-// USERINFO
 import Image from "next/image";
 
 type User = {
