@@ -8,3 +8,10 @@ export type Question = {
   isDisplay: boolean;
   answeredAt?: string;
 };
+
+export type User = {
+  username: string;
+  email?: string;
+  bio?: string | null;
+  image?: string | null;
+};
