@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Clock, Send, Share2, Trash2, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 interface QuestionCardProps {
   id: string;
@@ -27,16 +28,14 @@ export function QuestionCard({
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/messages/delete/${id}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        setVisible(false);
+      await axios.delete(`/api/messages/delete/${id}`);
+      setVisible(false);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error("Delete failed:", err.response?.data || err.message);
       } else {
-        console.error("Delete failed:", await res.text());
+        console.error("Unexpected error:", (err as Error).message);
       }
-    } catch (error) {
-      console.error("Network error:", error);
     }
   };
 
@@ -54,7 +53,7 @@ export function QuestionCard({
 
 
         <div className="flex-1">
-          
+
           <div className="flex justify-between items-start">
             <span className="block text-lg font-semibold text-gray-800 dark:text-gray-100">
               {question}

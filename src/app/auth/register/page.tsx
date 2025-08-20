@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import axios from "axios";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -25,6 +26,7 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
       const formData = new FormData();
       formData.append("username", username);
@@ -33,20 +35,18 @@ export default function RegisterPage() {
       formData.append("bio", bio);
       if (imageFile) formData.append("image", imageFile);
 
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const error = await res.json();
-        console.error("Registration failed:", error);
-        return;
-      }
+      const res = await axios.post("/api/auth/register", formData);
 
       router.push("/auth/login");
     } catch (err) {
-      console.error("Error registering:", err);
+      if (axios.isAxiosError(err)) {
+        console.error(
+          "Registration failed:",
+          err.response?.data || err.message
+        );
+      } else {
+        console.error("Error registering:", err);
+      }
     }
   };
 

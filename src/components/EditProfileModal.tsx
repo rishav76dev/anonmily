@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/lib/types";
+import axios from "axios";
 
 type Props = {
   user: User;
@@ -15,7 +16,7 @@ type Props = {
 
 export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
   const [username, setUsername] = useState(user.username);
-  const [email, setEmail] = useState(user.email); // ✅ now always available
+  const [email, setEmail] = useState(user.email);
   const [bio, setBio] = useState(user.bio || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -33,20 +34,22 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
     formData.append("bio", bio);
     if (imageFile) formData.append("image", imageFile);
 
-    const res = await fetch("/api/profile/update", {
-      method: "PUT",
-      body: formData,
-    });
+    try {
+      const res = await axios.put("/api/profile", formData);
 
-    const data = await res.json();
-    if (res.ok) {
-      onUpdate(data.user);
+      onUpdate(res.data.user);
       onClose();
-    } else {
-      console.error(data.error);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error(error.response?.data?.error || error.message);
+      } else if (error instanceof Error) {
+        console.error(error.message);
+      } else {
+        console.error("Unknown error", error);
+      }
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -60,7 +63,6 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
       >
         <h2 className="text-2xl font-bold mb-4">Edit Profile</h2>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          {/* Username */}
           <div className="grid gap-2">
             <Label htmlFor="username">Username</Label>
             <Input
@@ -71,7 +73,6 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
             />
           </div>
 
-          {/* Email */}
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -82,7 +83,6 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
             />
           </div>
 
-          {/* Bio */}
           <div className="grid gap-2">
             <Label htmlFor="bio">Bio</Label>
             <Input
@@ -92,7 +92,6 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
             />
           </div>
 
-          {/* Profile Image */}
           <div className="grid gap-2">
             <Label htmlFor="image">Profile Image</Label>
             <Input
@@ -112,7 +111,6 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
             )}
           </div>
 
-          {/* Buttons */}
           <div className="flex justify-end gap-2 mt-4">
             <Button type="button" onClick={onClose} variant="outline">
               Cancel
