@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Clock, Send, Share2, Trash2, MessageCircle } from "lucide-react";
 import Link from "next/link";
+import axios from "axios";
 
 interface QuestionCardProps {
   id: string;
@@ -27,16 +28,14 @@ export function QuestionCard({
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/messages/delete/${id}`, {
-        method: "DELETE",
-      });
-      if (res.ok) {
-        setVisible(false);
+      await axios.delete(`/api/messages/delete/${id}`);
+      setVisible(false);
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        console.error("Delete failed:", err.response?.data || err.message);
       } else {
-        console.error("Delete failed:", await res.text());
+        console.error("Unexpected error:", (err as Error).message);
       }
-    } catch (error) {
-      console.error("Network error:", error);
     }
   };
 
@@ -47,14 +46,14 @@ export function QuestionCard({
       className={`rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md p-5 bg-white dark:bg-gray-800 space-y-4 ${className}`}
     >
       <div className="flex items-start gap-4">
-        {/* Icon */}
+
         <div className="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900">
           <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-300" />
         </div>
 
-        {/* Question Content */}
+
         <div className="flex-1">
-          {/* Top row: Question + Actions */}
+
           <div className="flex justify-between items-start">
             <span className="block text-lg font-semibold text-gray-800 dark:text-gray-100">
               {question}
@@ -82,7 +81,6 @@ export function QuestionCard({
             </div>
           </div>
 
-          {/* Metadata */}
           <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400 mt-2">
             <div className="flex items-center gap-1">
               <Clock className="w-4 h-4" />
@@ -106,7 +104,7 @@ export function QuestionCard({
             )}
           </div>
 
-          {/* Answer Section */}
+          {/* answer section */}
           {isAnswered && (
             <div className="mt-4 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 p-4 rounded-xl shadow-sm">
               <div className="text-green-700 dark:text-green-300 font-medium mb-1">

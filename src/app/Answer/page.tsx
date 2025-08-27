@@ -27,7 +27,6 @@ export default async function AnswerDashboard() {
   return (
     <div className="min-h-screen px-6 py-10 bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
       <div className="max-w-3xl mx-auto space-y-4">
-        {/* Header */}
         <h1 className="text-3xl font-bold mb-6 flex items-center gap-3">
           <span className="text-gray-900 dark:text-gray-100 tracking-tight">
             Your Questions
@@ -99,7 +98,7 @@ export default async function AnswerDashboard() {
               ))}
             </TabsContent>
 
-            {/* Unanswered */}
+            {/* unanswered */}
             <TabsContent value="unanswered" className="mt-4 space-y-4">
               {messages.filter((m) => !m.answer).length > 0 ? (
                 messages
@@ -121,7 +120,7 @@ export default async function AnswerDashboard() {
               )}
             </TabsContent>
 
-            {/* Answered */}
+            {/* answered */}
             <TabsContent value="answered" className="mt-4 space-y-4">
               {messages.filter((m) => m.answer).length > 0 ? (
                 messages

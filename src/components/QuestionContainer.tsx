@@ -17,10 +17,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
       try {
         const res = await fetch(`/api/messages/${slug}`);
         const data = await res.json();
-
-        console.log("Fetched questions:", data);
-
-        //
+        // console.log("Fetched questions:", data);
         setQuestions(data.message);
       } catch (err: unknown) {
         console.error("Fetch error:", err);
@@ -39,7 +36,7 @@ export default function QuestionContainer({ slug }: { slug: string }) {
 
   return (
     <>
-    
+
       {questions.length === 0 ? (
         <p className="text-gray-500">No questions yet.</p>
       ) : (
@@ -53,7 +50,6 @@ export default function QuestionContainer({ slug }: { slug: string }) {
             answeredAt={
               q.answeredAt ? new Date(q.answeredAt).toLocaleString() : undefined
             }
-
           />
         ))
       )}

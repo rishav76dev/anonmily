@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 export default function QuestionForm({ slug }: { slug: string }) {
   const [question, setQuestion] = useState("");
@@ -10,17 +11,17 @@ export default function QuestionForm({ slug }: { slug: string }) {
   const handleQuestionSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/messages", {
-      method: "POST",
-      body: JSON.stringify({ question, slug }),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    if (res.ok) {
-      setQuestion(""); // clear on success
-      alert("Question sent!");
-    } else {
+    try {
+      const res = await axios.post("/api/messages", { question, slug });
+      if (res.status >= 200 && res.status < 300) {
+        setQuestion(""); // clear on success
+        alert("Question sent!");
+      } else {
+        alert("Something went wrong.");
+      }
+    } catch (error) {
       alert("Something went wrong.");
+      console.error(error);
     }
   };
 

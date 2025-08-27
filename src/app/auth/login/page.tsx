@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
+import axios from "axios";
 import {
   Card,
   CardHeader,
@@ -27,17 +27,11 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await axios.post("/api/auth/login", { email, password });
 
-      const data = await res.json();
+      const data = res.data;
 
-      if (!res.ok) {
+      if (!res.status || res.status >= 400) {
         setError(data.error || "Login failed");
         return;
       }
