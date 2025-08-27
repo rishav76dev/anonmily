@@ -13,7 +13,7 @@ export default function Navbar() {
         >
           <span>
             <Image
-              src="/anon.png"
+              src="/anon-ok.png"
               alt="logo"
               width={0}
               height={0}
