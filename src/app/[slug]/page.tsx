@@ -4,6 +4,8 @@ import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
 import CopyLink from "@/components/CopyLink";
+import { getUserFromToken } from "@/lib/utils";
+import { cookies } from "next/headers";
 
 export default async function Page({
   params,
@@ -11,27 +13,27 @@ export default async function Page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const user = await prisma.user.findUnique({ where: { slug } });
+
+  const user = await prisma.user.findUnique({
+    where: { slug },
+  });
 
   if (!user) notFound();
-  // const cookieStore = await cookies();
-  // const token = cookieStore.get("token")?.value;
 
-  // const loggedInUser = getUserFromToken(token);
-
-  // const isOwner = loggedInUser?.userId === user.id;
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  
+  const loggedInUser = getUserFromToken(token);
+  const isOwner = loggedInUser?.userId === user.id;
+  //sanitize user: remove password but keep everything else
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password, ...safeUser } = user;
 
   return (
     <div className="flex flex-col items-center min-h-screen bg-background text-foreground transition-colors">
       <div className="w-full max-w-[600px] px-4 mt-10">
         {/* user profile */}
-        <UserInfo
-          user={{
-            username: user.username ?? "Anonymous",
-            image: user.image,
-            bio: user.bio,
-          }}
-        />
+        <UserInfo user={safeUser} isOwner={isOwner} />
 
         <CopyLink slug={slug} />
 

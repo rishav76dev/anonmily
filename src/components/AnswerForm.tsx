@@ -3,6 +3,8 @@
 import { Info, Send } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Textarea } from "./ui/textarea";
+import axios from "axios";
 
 export default function AnswerForm({ id }: { id: string }) {
   const [answer, setAnswer] = useState("");
@@ -14,40 +16,33 @@ export default function AnswerForm({ id }: { id: string }) {
       alert("Please write an answer before submitting.");
       return;
     }
+      try {
+        const res = await axios.put(`/api/messages/answer/${id}`, { answer });
 
-    try {
-      const res = await fetch(`/api/messages/answer/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ answer }),
-      });
-
-      if (res.ok) {
-        alert("Answer submitted successfully!");
-        setAnswer("");
-        setCharCount(0);
-        router.refresh();
-      } else {
-        alert("Failed to submit answer.");
+        if (res.status === 200) {
+          alert("Answer submitted successfully!");
+          setAnswer("");
+          setCharCount(0);
+          router.refresh();
+        } else {
+          alert("Failed to submit answer.");
+        }
+      } catch (error) {
+        console.error("Error submitting answer:", error);
+        alert("An error occurred. Please try again.");
       }
-    } catch (error) {
-      console.error("Error submitting answer:", error);
-      alert("An error occurred. Please try again.");
-    }
+
   };
 
   return (
     <div className="space-y-4">
-      {/* Title */}
+
       <div className="text-sm font-semibold text-foreground">
         Send your response to the anonymous sender
       </div>
 
-      {/* Textarea */}
       <div className="relative">
-        <textarea
+        <Textarea
           name="answer"
           placeholder="Reply with your thoughts..."
           maxLength={500}
@@ -64,7 +59,6 @@ export default function AnswerForm({ id }: { id: string }) {
         </span>
       </div>
 
-      {/* Footer */}
       <div className="flex justify-between items-center text-xs text-muted-foreground">
         <div className="flex items-center gap-1">
           <Info size={14} />
