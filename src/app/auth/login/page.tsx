@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -21,6 +21,7 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -42,11 +43,10 @@ export default function LoginPage() {
         return;
       }
 
-      // Clear form and redirect
       setEmail("");
       setPassword("");
       alert("User logged in");
-      // TODO: Use Next.js router to redirect
+      router.push('/answer')
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
