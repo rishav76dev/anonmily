@@ -41,7 +41,7 @@ export default function LoginPage() {
       setEmail("");
       setPassword("");
       alert("User logged in");
-      router.push('/answer')
+      router.push('/message')
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
