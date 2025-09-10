@@ -46,28 +46,34 @@ export function QuestionCard({
       className={`rounded-2xl border border-gray-200 dark:border-gray-700 shadow-md p-5 bg-white dark:bg-gray-800 space-y-4 ${className}`}
     >
       <div className="flex items-start gap-4">
-
         <div className="w-12 h-12 rounded-full flex items-center justify-center bg-purple-100 dark:bg-purple-900">
           <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-300" />
         </div>
 
-
         <div className="flex-1">
-
           <div className="flex justify-between items-start">
             <span className="block text-lg font-semibold text-gray-800 dark:text-gray-100">
               {question}
             </span>
 
             <div className="flex items-center gap-3">
-              <Link href={`/share/${id}`}>
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-800 transition"
-                  title="Share"
-                >
-                  <Share2 className="w-4 h-4" />
-                </div>
-              </Link>
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900 dark:text-purple-300 dark:hover:bg-purple-800 transition cursor-pointer"
+                title="Copy share link"
+                onClick={() => {
+                  const shareUrl = `${window.location.origin}/share/${id}`;
+                  navigator.clipboard
+                    .writeText(shareUrl)
+                    .then(() => {
+                      alert("Share link copied to clipboard!");
+                    })
+                    .catch((err) => {
+                      console.error("Failed to copy link:", err);
+                    });
+                }}
+              >
+                <Share2 className="w-4 h-4" />
+              </div>
 
               {isOwner && (
                 <button
