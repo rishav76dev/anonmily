@@ -89,14 +89,14 @@ export function QuestionCard({
 
             {isAnswered ? (
               <Link
-                href={`/answer/${id}`}
+                href={`/message/${id}`}
                 className="cursor-pointer font-medium text-green-600 hover:underline dark:text-green-400 flex items-center gap-1"
               >
                 Answered <Send className="w-4 h-4" />
               </Link>
             ) : (
               <Link
-                href={`/answer/${id}`}
+                href={`/message/${id}`}
                 className="cursor-pointer font-medium text-blue-600 hover:underline dark:text-blue-400 flex items-center gap-1"
               >
                 Reply now <Send className="w-4 h-4" />
