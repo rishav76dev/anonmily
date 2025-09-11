@@ -41,6 +41,7 @@ export default function LoginPage() {
       setEmail("");
       setPassword("");
       alert("User logged in");
+      //todo remove alert add toast
       router.push('/message')
     } catch (err) {
       console.error("Login error:", err);

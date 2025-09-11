@@ -5,8 +5,14 @@ import { ThemeSwitch } from "@/components/ui/switch";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
+
+interface User {
+  id: string;
+  email: string;
+  slug: string;
+}
 export default function Navbar() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
@@ -50,11 +56,13 @@ export default function Navbar() {
           <ThemeSwitch />
 
           {!user ? (
-            <Link href="/auth/login">
-              <button className="w-full dark:bg-white dark:text-black dark:hover:bg-gray-200 bg-black text-white hover:bg-gray-800 hover:text-white rounded-full px-8 h-8 max-sm:px-4 max-sm:h-7">
-                Login
-              </button>
-            </Link>
+            <>
+              <Link href="/auth/login">
+                <button className="w-full dark:bg-white dark:text-black dark:hover:bg-gray-200 bg-black text-white hover:bg-gray-800 hover:text-white rounded-full px-8 h-8 max-sm:px-4 max-sm:h-7">
+                  Login
+                </button>
+              </Link>
+            </>
           ) : (
             <button
               onClick={handleLogout}

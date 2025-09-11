@@ -4,6 +4,7 @@ import { getUserFromToken } from "@/lib/utils";
 import { notFound } from "next/navigation";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Link from "next/link";
 
 export default async function AnswerDashboard() {
   const cookieStore = await cookies();
@@ -14,7 +15,7 @@ export default async function AnswerDashboard() {
 
   const dbUser = await prisma.user.findUnique({
     where: { id: payload.userId },
-    select: { id: true, username: true },
+    select: { id: true, username: true, slug: true },
   });
 
   if (!dbUser) return notFound();
@@ -31,9 +32,14 @@ export default async function AnswerDashboard() {
           <span className="text-gray-900 dark:text-gray-100 tracking-tight">
             Your Questions
           </span>
-          <span className="bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-200 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-medium border border-indigo-200 dark:border-indigo-700 shadow-sm">
-            @{dbUser.username}
-          </span>
+          <Link
+            href={`/${dbUser.slug}`} // ✅ Now works
+          >
+            <span className="bg-indigo-100 dark:bg-indigo-900 dark:text-indigo-200 text-indigo-700 px-4 py-1.5 rounded-full text-sm font-medium border border-indigo-200 dark:border-indigo-700 shadow-sm">
+              @{dbUser.username}
+            </span>
+            {/* add a arrow for more visual feedball */}
+          </Link>
         </h1>
 
         {/* If no questions */}
@@ -58,8 +64,8 @@ export default async function AnswerDashboard() {
               No questions yet
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm">
-              📢 Share your profile link and start receiving anonymous
-              questions from friends and followers.
+              📢 Share your profile link and start receiving anonymous questions
+              from friends and followers.
             </p>
 
             <button className="mt-6 px-5 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-full shadow-md hover:shadow-lg transition">

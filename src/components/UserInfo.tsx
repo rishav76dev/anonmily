@@ -3,6 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import EditProfileModal from "./EditProfileModal";
 import { User } from "@/lib/types"
+import Link from "next/link";
 
 type UserInfoProps = {
   user: User;
@@ -46,12 +47,20 @@ export function UserInfo({ user, isOwner }: UserInfoProps) {
 
         {/* edit button for owner*/}
         {isOwner && (
-          <button
-            onClick={() => setShowModal(true)}
-            className="mt-4 px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
-          >
-            Edit Profile
-          </button>
+          <div className="flex flex-row items-center gap-4">
+            <button
+              onClick={() => setShowModal(true)}
+              className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600"
+            >
+              Edit Profile
+            </button>
+
+            <Link href="/message">
+              <button className="px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600">
+                See All Questions
+              </button>
+            </Link>
+          </div>
         )}
       </div>
 
