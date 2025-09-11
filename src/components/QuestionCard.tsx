@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Clock, Send, Share2, Trash2, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import axios from "axios";
+import { toast } from "sonner";
 
 interface QuestionCardProps {
   id: string;
@@ -65,7 +66,7 @@ export function QuestionCard({
                   navigator.clipboard
                     .writeText(shareUrl)
                     .then(() => {
-                      alert("Share link copied to clipboard!");
+                      toast.success("Share link copied to clipboard!");
                     })
                     .catch((err) => {
                       console.error("Failed to copy link:", err);

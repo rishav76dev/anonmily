@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function QuestionForm({ slug }: { slug: string }) {
   const [question, setQuestion] = useState("");
@@ -15,12 +16,12 @@ export default function QuestionForm({ slug }: { slug: string }) {
       const res = await axios.post("/api/messages", { question, slug });
       if (res.status >= 200 && res.status < 300) {
         setQuestion(""); // clear on success
-        alert("Question sent!");
+        toast.success("Question sent successfully!");
       } else {
-        alert("Something went wrong.");
+        toast.error("Something went wrong. Please try again.");
       }
     } catch (error) {
-      alert("Something went wrong.");
+      toast.error("Failed to send question. Please try again.");
       console.error(error);
     }
   };

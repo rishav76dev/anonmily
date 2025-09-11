@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 export default function CopyLink({ slug }: { slug: string }) {
   const link = `https://anonmily.vercel.app/${slug}`;
 
@@ -15,7 +16,7 @@ export default function CopyLink({ slug }: { slug: string }) {
           className="bg-primary text-white px-3 py-1 rounded-md text-sm hover:opacity-90"
           onClick={() => {
             navigator.clipboard.writeText(link);
-            alert("Profile link copied!");
+            toast.success("Profile link copied!");
           }}
         >
           Copy

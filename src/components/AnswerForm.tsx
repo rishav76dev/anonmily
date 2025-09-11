@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Textarea } from "./ui/textarea";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function AnswerForm({ id }: { id: string }) {
   const [answer, setAnswer] = useState("");
@@ -13,25 +14,25 @@ export default function AnswerForm({ id }: { id: string }) {
 
   const handleAnswerSubmit = async () => {
     if (!answer.trim()) {
-      alert("Please write an answer before submitting.");
+      toast.error("Please write an answer before submitting.");
       return;
     }
-      try {
-        const res = await axios.put(`/api/messages/answer/${id}`, { answer });
 
-        if (res.status === 200) {
-          alert("Answer submitted successfully!");
-          setAnswer("");
-          setCharCount(0);
-          router.refresh();
-        } else {
-          alert("Failed to submit answer.");
-        }
-      } catch (error) {
-        console.error("Error submitting answer:", error);
-        alert("An error occurred. Please try again.");
+    try {
+      const res = await axios.put(`/api/messages/answer/${id}`, { answer });
+
+      if (res.status === 200) {
+        toast.success("Answer submitted successfully!");
+        setAnswer("");
+        setCharCount(0);
+        router.refresh();
+      } else {
+        toast.error("Failed to submit answer.");
       }
-
+    } catch (error) {
+      console.error("Error submitting answer:", error);
+      toast.error("An error occurred. Please try again.");
+    }
   };
 
   return (

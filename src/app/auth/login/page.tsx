@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { toast } from "sonner";
 import {
   Card,
   CardHeader,
@@ -40,9 +41,8 @@ export default function LoginPage() {
 
       setEmail("");
       setPassword("");
-      alert("User logged in");
-      //todo remove alert add toast
-      router.push('/message')
+      toast.success("User logged in successfully!");
+      router.push("/message");
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");
