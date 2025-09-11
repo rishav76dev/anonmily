@@ -42,7 +42,10 @@ export default function LoginPage() {
       setEmail("");
       setPassword("");
       toast.success("User logged in successfully!");
-      router.push("/message");
+      const userSlug = data.user.slug;
+      // Assuming API returns user object with slug
+      router.push(`/${userSlug}`);
+      console.log(userSlug)
     } catch (err) {
       console.error("Login error:", err);
       setError("Something went wrong. Please try again.");

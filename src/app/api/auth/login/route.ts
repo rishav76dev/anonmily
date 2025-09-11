@@ -72,8 +72,9 @@ export async function POST(req: Request) {
       user: {
         id: user.id,
         email: user.email,
+        slug: user.slug,
         // Don't include password or other sensitive data
-      }
+      },
     });
 
     response.headers.set("Set-Cookie", cookie);
