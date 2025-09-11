@@ -17,13 +17,23 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    async function fetchUser() {
-      const res = await fetch("/api/auth/me", { cache: "no-store" });
-      const data = await res.json();
-      setUser(data.user);
-    }
+    // create a global context for if user is logged in or not
+    const fetchUser = async () => {
+      try {
+        const res = await fetch("/api/auth/me", { cache: "no-store" });
+        const data = await res.json();
+        setUser(data.user);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
     fetchUser();
+    const intervalId = setInterval(fetchUser, 2000);
+
+    return () => clearInterval(intervalId);
   }, []);
+
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
