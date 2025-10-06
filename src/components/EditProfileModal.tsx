@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { User } from "@/lib/types";
-import axios from "axios";
-import { toast } from "sonner"; // Assuming you're using sonner for toasts like in registration
+import { useUpdateProfile } from "@/hooks/useProfileQueries";
 
 type Props = {
   user: User;
@@ -20,61 +19,33 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
   const [email, setEmail] = useState(user.email || "");
   const [bio, setBio] = useState(user.bio || "");
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  // console.log(user);
+  const updateProfileMutation = useUpdateProfile();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
     // Basic validation
     if (!username.trim()) {
-      toast.error("Username is required");
-      setLoading(false);
       return;
     }
 
     if (!email.trim()) {
-      toast.error("Email is required");
-      setLoading(false);
       return;
     }
 
     try {
-      const formData = new FormData();// Add slug to identify the user
-      formData.append("username", username.trim());
-      formData.append("email", email.trim());
-      formData.append("bio", bio.trim());
-      formData.append("slug", user.slug);
-
-      if (imageFile) {
-        formData.append("image", imageFile);
-      }
-
-      const res = await axios.put("/api/profile", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const result = await updateProfileMutation.mutateAsync({
+        username,
+        email,
+        bio,
+        slug: user.slug,
+        image: imageFile || undefined,
       });
 
-      toast.success("Profile updated successfully!");
-      onUpdate(res.data.user);
+      onUpdate(result.user);
       onClose();
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage = error.response?.data?.error || error.message;
-        toast.error(`Update failed: ${errorMessage}`);
-        console.error("Profile update error:", errorMessage);
-      } else if (error instanceof Error) {
-        toast.error(`Update failed: ${error.message}`);
-        console.error("Profile update error:", error.message);
-      } else {
-        toast.error("An unknown error occurred");
-        console.error("Unknown error:", error);
-      }
-    } finally {
-      setLoading(false);
+    } catch {
+      // Error is already handled in the mutation
     }
   };
 
@@ -164,12 +135,12 @@ export default function EditProfileModal({ user, onClose, onUpdate }: Props) {
               type="button"
               onClick={onClose}
               variant="outline"
-              disabled={loading}
+              disabled={updateProfileMutation.isPending}
             >
               Cancel
             </Button>
-            <Button type="submit" disabled={loading}>
-              {loading ? "Updating..." : "Save Changes"}
+            <Button type="submit" disabled={updateProfileMutation.isPending}>
+              {updateProfileMutation.isPending ? "Updating..." : "Save Changes"}
             </Button>
           </div>
         </form>

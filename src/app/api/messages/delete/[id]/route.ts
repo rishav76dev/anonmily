@@ -1,6 +1,5 @@
 import { prisma } from "@/lib/db";
-import { getUserFromToken } from "@/lib/utils";
-import { cookies } from "next/headers";
+import { getServerAuth } from "@/hooks/useServerAuth";
 import { NextResponse } from "next/server";
 
 export async function DELETE(
@@ -8,11 +7,9 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  const payload = getUserFromToken(token);
+  const { user: authUser } = await getServerAuth();
 
-  if (!payload) {
+  if (!authUser) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -20,7 +17,7 @@ export async function DELETE(
     where: { id: Number(id) },
   });
 
-  if (!message || message.userId !== payload.userId) {
+  if (!message || message.userId !== authUser.userId) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   }
 

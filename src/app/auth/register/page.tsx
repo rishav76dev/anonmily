@@ -36,7 +36,7 @@ export default function RegisterPage() {
       formData.append("bio", bio);
       if (imageFile) formData.append("image", imageFile);
 
-      const res = await axios.post("/api/auth/register", formData);
+      await axios.post("/api/auth/register", formData);
 
       toast.success("Registration successful!");
       router.push("/auth/login");

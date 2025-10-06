@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { Clock, Send, Share2, Trash2, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import axios from "axios";
 import { toast } from "sonner";
+import { useDeleteQuestion } from "@/hooks/useMessageQueries";
 
 interface QuestionCardProps {
   id: string;
@@ -25,19 +25,15 @@ export function QuestionCard({
   className,
 }: QuestionCardProps) {
   const [visible, setVisible] = useState(true);
+  const deleteQuestionMutation = useDeleteQuestion();
   const isAnswered = !!answer && answer.trim().length > 0;
 
   const handleDelete = async () => {
-    try {
-      await axios.delete(`/api/messages/delete/${id}`);
-      setVisible(false);
-    } catch (err: unknown) {
-      if (axios.isAxiosError(err)) {
-        console.error("Delete failed:", err.response?.data || err.message);
-      } else {
-        console.error("Unexpected error:", (err as Error).message);
-      }
-    }
+    deleteQuestionMutation.mutate(id, {
+      onSuccess: () => {
+        setVisible(false);
+      },
+    });
   };
 
   if (!visible) return null;
@@ -79,7 +75,8 @@ export function QuestionCard({
               {isOwner && (
                 <button
                   onClick={handleDelete}
-                  className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800 transition"
+                  disabled={deleteQuestionMutation.isPending}
+                  className="w-8 h-8 rounded-full flex items-center justify-center bg-red-100 text-red-600 hover:bg-red-200 dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800 transition disabled:opacity-50"
                   title="Delete"
                 >
                   <Trash2 className="w-4 h-4" />

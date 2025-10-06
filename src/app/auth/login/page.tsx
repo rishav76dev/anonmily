@@ -2,9 +2,6 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import { toast } from "sonner";
 import {
   Card,
   CardHeader,
@@ -16,42 +13,16 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { useLogin } from "@/hooks/useAuthQueries";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+  const loginMutation = useLogin();
 
-  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
-    setIsLoading(true);
-
-    try {
-      const res = await axios.post("/api/auth/login", { email, password });
-
-      const data = res.data;
-
-      if (!res.status || res.status >= 400) {
-        setError(data.error || "Login failed");
-        return;
-      }
-
-      setEmail("");
-      setPassword("");
-      toast.success("User logged in successfully!");
-      const userSlug = data.user.slug;
-      // Assuming API returns user object with slug
-      router.push(`/${userSlug}`);
-      console.log(userSlug)
-    } catch (err) {
-      console.error("Login error:", err);
-      setError("Something went wrong. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -86,14 +57,15 @@ export default function LoginPage() {
                   required
                 />
               </div>
-              {error && (
-                <p className="text-sm text-red-500 mt-2 text-center">{error}</p>
-              )}
             </div>
           </CardContent>
           <CardFooter className="flex flex-col gap-2">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Log In"}
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loginMutation.isPending}
+            >
+              {loginMutation.isPending ? "Logging in..." : "Log In"}
             </Button>
             <p className="text-sm">
               Don&#39;t have an account?{" "}

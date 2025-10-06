@@ -1,20 +1,17 @@
-import { cookies } from "next/headers";
 import { prisma } from "@/lib/db";
-import { getUserFromToken } from "@/lib/utils";
+import { getServerAuth } from "@/hooks/useServerAuth";
 import { notFound } from "next/navigation";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Link from "next/link";
 
 export default async function AnswerDashboard() {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  const payload = getUserFromToken(token);
+  const { user: authUser } = await getServerAuth();
 
-  if (!payload) return notFound();
+  if (!authUser) return notFound();
 
   const dbUser = await prisma.user.findUnique({
-    where: { id: payload.userId },
+    where: { id: authUser.userId },
     select: { id: true, username: true, slug: true },
   });
 

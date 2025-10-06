@@ -4,8 +4,7 @@ import { UserInfo } from "@/components/UserInfo";
 import QuestionForm from "@/components/QuestionForm";
 import QuestionContainer from "@/components/QuestionContainer";
 import CopyLink from "@/components/CopyLink";
-import { getUserFromToken } from "@/lib/utils";
-import { cookies } from "next/headers";
+import { getServerAuth, isOwner } from "@/hooks/useServerAuth";
 
 export default async function Page({
   params,
@@ -20,11 +19,9 @@ export default async function Page({
 
   if (!user) notFound();
 
-  const cookieStore = await cookies();
-  const token = cookieStore.get("token")?.value;
-  
-  const loggedInUser = getUserFromToken(token);
-  const isOwner = loggedInUser?.userId === user.id;
+  const { user: loggedInUser } = await getServerAuth();
+  const userIsOwner = isOwner(loggedInUser, user.id);
+
   //sanitize user: remove password but keep everything else
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password, ...safeUser } = user;
@@ -33,7 +30,7 @@ export default async function Page({
     <div className="flex flex-col items-center min-h-screen bg-background text-foreground transition-colors">
       <div className="w-full max-w-[600px] px-4 mt-10">
         {/* user profile */}
-        <UserInfo user={safeUser} isOwner={isOwner} />
+        <UserInfo user={safeUser} isOwner={userIsOwner} />
 
         <CopyLink slug={slug} />
 

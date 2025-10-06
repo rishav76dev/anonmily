@@ -4,40 +4,33 @@ import { Info, Send } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Textarea } from "./ui/textarea";
-import axios from "axios";
-import { toast } from "sonner";
+import { useSubmitAnswer } from "@/hooks/useMessageQueries";
 
 export default function AnswerForm({ id }: { id: string }) {
   const [answer, setAnswer] = useState("");
   const [charCount, setCharCount] = useState(0);
   const router = useRouter();
+  const submitAnswerMutation = useSubmitAnswer();
 
   const handleAnswerSubmit = async () => {
     if (!answer.trim()) {
-      toast.error("Please write an answer before submitting.");
       return;
     }
 
-    try {
-      const res = await axios.put(`/api/messages/answer/${id}`, { answer });
-
-      if (res.status === 200) {
-        toast.success("Answer submitted successfully!");
-        setAnswer("");
-        setCharCount(0);
-        router.refresh();
-      } else {
-        toast.error("Failed to submit answer.");
+    submitAnswerMutation.mutate(
+      { id, answer: answer.trim() },
+      {
+        onSuccess: () => {
+          setAnswer("");
+          setCharCount(0);
+          router.refresh();
+        },
       }
-    } catch (error) {
-      console.error("Error submitting answer:", error);
-      toast.error("An error occurred. Please try again.");
-    }
+    );
   };
 
   return (
     <div className="space-y-4">
-
       <div className="text-sm font-semibold text-foreground">
         Send your response to the anonymous sender
       </div>
@@ -67,9 +60,10 @@ export default function AnswerForm({ id }: { id: string }) {
         </div>
         <button
           onClick={handleAnswerSubmit}
-          className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2 transition-colors"
+          disabled={submitAnswerMutation.isPending || !answer.trim()}
+          className="bg-primary text-primary-foreground hover:bg-primary/80 px-4 py-2 rounded-md text-sm font-medium flex items-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Send Reply
+          {submitAnswerMutation.isPending ? "Sending..." : "Send Reply"}
           <Send size={16} />
         </button>
       </div>
