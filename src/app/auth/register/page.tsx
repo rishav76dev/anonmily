@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import axios from "axios";
+import { toast } from "sonner";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -37,14 +38,15 @@ export default function RegisterPage() {
 
       const res = await axios.post("/api/auth/register", formData);
 
+      toast.success("Registration successful!");
       router.push("/auth/login");
     } catch (err) {
       if (axios.isAxiosError(err)) {
-        console.error(
-          "Registration failed:",
-          err.response?.data || err.message
-        );
+        const errorMessage = err.response?.data?.error || err.message;
+        toast.error(`Registration failed: ${errorMessage}`);
+        console.error("Registration failed:", errorMessage);
       } else {
+        toast.error("An unknown error occurred.");
         console.error("Error registering:", err);
       }
     }

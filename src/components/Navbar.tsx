@@ -5,7 +5,6 @@ import { ThemeSwitch } from "@/components/ui/switch";
 import { useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-
 interface User {
   id: string;
   email: string;
@@ -20,7 +19,10 @@ export default function Navbar() {
     // create a global context for if user is logged in or not
     const fetchUser = async () => {
       try {
-        const res = await fetch("/api/auth/me", { cache: "no-store" });
+        const res = await fetch("/api/auth/me", {
+          cache: "no-store",
+          credentials: "include",
+        });
         const data = await res.json();
         setUser(data.user);
       } catch (error) {
@@ -33,7 +35,6 @@ export default function Navbar() {
 
     return () => clearInterval(intervalId);
   }, []);
-
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });

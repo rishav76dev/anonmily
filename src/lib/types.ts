@@ -14,4 +14,5 @@ export type User = {
   email?: string;
   bio?: string | null;
   image?: string | null;
+  slug: string;
 };
